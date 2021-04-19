@@ -15,12 +15,6 @@ session = db()
 
 #https://stackoverflow.com/questions/36588126/uuid-is-not-json-serializable
 
-class UUIDEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
-            # if the obj is uuid, we simply return the value of uuid
-            return obj.hex
-        return json.JSONEncoder.default(self, obj)
 
 @get('/users')
 @get('/users/<id>')
@@ -54,7 +48,7 @@ def update_user():
     new_user = Users(**user)
     session.add(new_user)
     session.commit()
-    return json.dumps(new_user.to_dict(), cls=UUIDEncoder)
+    return json.dumps(new_user.to_dict())
 
 
 run(host='localhost', port=8080,reloader=True, debug=True)
